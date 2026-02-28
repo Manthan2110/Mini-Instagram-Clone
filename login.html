@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page | MiniInstagram</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * {
+            font-family: "Poppins", sans-serif;
+        }
+
+        :root {
+            --accent: #0d3c71;
+        }
+
+        body {
+            background-color: #111;
+        }
+
+        .bg-card {
+            background-color: #131313;
+        }
+
+        .left-content,
+        .form-wraper {
+            border-bottom: rgb(88, 115, 141) solid 1px;
+        }
+
+        .title {
+            max-width: 1000px;
+            font-size: 52px;
+            font-weight: 300;
+        }
+
+        .mini-title {
+            font-size: 20px;
+            font-weight: 300;
+        }
+
+        .linear {
+            background: linear-gradient(to right, #833ab4, #fd1d1d, #fcb045);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .link-accent {
+            color: var(--accent);
+        }
+
+        .social-img {
+            width: 80px;
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+            border: 0;
+            color: #aaa;
+            border-radius: 25px;
+            padding: 12px 22px;
+            font-weight: 500;
+            font-size: 16px;
+            transition: 0.6s ease;
+        }
+
+        .btn-accent:hover {
+            background-color: var(--accent);
+            color: #fff;
+            transform: scale(1.01);
+        }
+
+        .social-btn:hover,
+        .social-btn2:hover {
+            background-color: var(--accent);
+            transform: scale(1.01);
+        }
+
+        .social-btn {
+            background-color: transparent;
+            border: 2px solid #3f5c6b;
+            border-radius: 25px;
+            padding: 15px 22px;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .social-btn2 {
+            background-color: transparent;
+            border-radius: 25px;
+            padding: 15px 22px;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .form-wraper {
+            background: #152127;
+            min-height: 90vh;
+            border-left: 2px solid rgb(88, 115, 141);
+        }
+
+        /* small‑screen adjustments */
+        @media (max-width: 768px) {
+            /* hide the decorative left panel on phones */
+            .left-content {
+                display: none;
+            }
+
+            .form-wraper {
+                border-left: none;
+                min-height: auto;
+                padding-top: 40px;
+                padding-bottom: 40px;
+            }
+        }
+
+        .form-floating .form-control {
+            background: transparent;
+            border: 2px solid rgb(88, 115, 141);
+            border-radius: 15px;
+            color: #152127;
+            transition: 0.6s ease;
+        }
+
+        .form-floating .form-control:focus {
+            background: transparent;
+            border: 3px solid #445664;
+            border-radius: 15px;
+            color: #152127;
+            box-shadow: none;
+        }
+
+        .form-floating .form-control:hover {
+            background-color: transparent;
+            border: 2px solid #445664;
+            transform: scale(1.01);
+        }
+
+        .hero-img {
+            margin: auto;
+            width: 650px;
+            max-width: 100%; /* ensure image never overflows on narrow screens */
+        }
+
+        .insta-img {
+            width: 85px;
+        }
+
+        .meta-img {
+            width: 85px;
+        }
+
+        .img-outline {
+            outline: 6px solid rgba(0, 0, 0, .15);
+        }
+
+        footer {
+            background: #111;
+        }
+
+        .footer-list {
+            background: none;
+        }
+
+        .list-group-item {
+            background: none;
+            border: none;
+        }
+
+        .list-group-item a,
+        .copyright p {
+            font-size: 14px;
+            text-decoration: none;
+            color: #aaa;
+            transition: 0.6s ease;
+        }
+
+        .form-control.is-invalid {
+            border-color: #dc3545 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-7 left-content">
+                <img src="images/insta-logo.png" alt="MiniInstagram Logo" class="img-fluid insta-img mt-5 ms-5">
+
+                <h1 class="text-center title text-white mt-4 ms-5">See everyday moments from your <span
+                        class="linear">Close friends</span>.</h1>
+
+                <div class="hero-img">
+                    <img src="images/login.png" alt="Login Image" class="img-fluid login-img mb-3">
+                </div>
+            </div>
+            <div class="col-md-5 form-wraper text-center">
+                <div class="d-flex justify-content-center align-items-center h-100">
+                    <form class="w-100 p-5" id="loginForm" novalidate>
+                        <h1 class="mini-title text-white mb-3 text-start">Log into MiniInstagram</h1>
+
+                        <!-- Username -->
+                        <div class="form-floating">
+                            <input type="text" class="form-control ps-4 text-white" id="username"
+                                placeholder="Username or Email">
+                            <label for="username" class="float-label ps-4 text-white">Username or Email</label>
+                            <small class="error-msg text-danger ps-3" id="usernameError"></small>
+                        </div>
+
+
+                        <!-- Password -->
+                        <div class="form-floating">
+                            <input type="password" class="form-control ps-4 text-white" id="password"
+                                placeholder="Password">
+                            <label for="password" class="float-label ps-4 text-white">Password</label>
+                            <small class="error-msg text-danger ps-3" id="passwordError"></small>
+                        </div>
+
+
+                        <!-- CTA -->
+                        <button type="submit" class="btn btn-accent fw-semibold mt-1 mb-4 w-100" id="submitBtn">
+                            Log in
+                        </button>
+
+                        <span class="forgot-password text-white fs-6">Forgot Pasword?</span>
+
+                        <div class="row g-3 mt-5">
+                            <div class="col-12 d-grid">
+                                <button type="button" class="btn social-btn text-white"
+                                    aria-label="Sign in with Google">
+                                    <img src="images/google-logo.png" alt="Google logo" class="social-img pe-1"> Log in
+                                    with Google
+                                </button>
+                            </div>
+                            <div class="col-12 d-grid">
+                                <div type="button" class="btn btn-outline-primary social-btn2 text-primary">
+                                    <a href="register.html" class="text-decoration-none">Create new account</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="meta-img-div">
+                            <img src="images/meta-logo-Photoroom.png" alt="Meta Image" class="img-fluid meta-img">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+
+            <ul class="list-group list-group-horizontal footer-list justify-content-center mt-2">
+                <li class="list-group-item border-0 text-decoration-none"><a href="#home">Meta</a></li>
+                <li class="list-group-item border-0"><a href="#about">About</a></li>
+                <li class="list-group-item border-0"><a href="#blog">Blog</a></li>
+                <li class="list-group-item border-0"><a href="#jobs">Jobs</a></li>
+                <li class="list-group-item border-0"><a href="#services">Help</a></li>
+                <li class="list-group-item border-0"><a href="#services">API</a></li>
+                <li class="list-group-item border-0"><a href="#services">Privacy</a></li>
+                <li class="list-group-item border-0"><a href="#services">Terms</a></li>
+                <li class="list-group-item border-0"><a href="#services">Locations</a></li>
+                <li class="list-group-item border-0"><a href="#services">Instagram Lite</a></li>
+                <li class="list-group-item border-0"><a href="#services">Meta AI</a></li>
+                <li class="list-group-item border-0"><a href="#services">Threads</a></li>
+                <li class="list-group-item border-0"><a href="#services">Contact</a></li>
+                <li class="list-group-item border-0"><a href="#services">Meta Verified</a></li>
+            </ul>
+
+            <div class="copyright mt-3">
+                <p class="text-center">&copy; 2026 MiniInstagram from Meta</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+        // Elements
+        const username = $("#username");
+        const password = $("#password");
+        const submitBtn = $("#submitBtn");
+        const usernameError = $("#usernameError");
+        const passwordError = $("#passwordError");
+
+        // Safe read from localStorage with guards
+        function getRegisteredUsers() {
+            let raw = localStorage.getItem("users");
+            if (!raw) return [];
+            try {
+                const data = JSON.parse(raw);
+                return Array.isArray(data) ? data : [];
+            } catch (e) {
+                console.warn("users JSON parse failed:", e);
+                return [];
+            }
+        }
+
+        // Normalize helpers
+        const norm = (s) => (s ?? "").toString().trim();
+        const normLower = (s) => norm(s).toLowerCase();
+
+        // Create a simple session id
+        function createSessionId() {
+            return Math.random().toString(36).slice(2) + Date.now().toString(36);
+        }
+
+        // Try to read a value from multiple keys
+        function pick(obj, keys = []) {
+            for (const k of keys) {
+                if (obj && obj[k] != null) return obj[k];
+            }
+            return undefined;
+        }
+
+        // Find user by username/email (case-insensitive)
+        function findUser(users, inputVal) {
+            const input = norm(inputVal);
+            const inputLower = input.toLowerCase();
+
+            return users.find(u => {
+                const nameVal = pick(u, ["Name", "name", "Username", "username"]);
+                const emailVal = pick(u, ["Email", "email", "emailAddress", "emailaddress"]);
+
+                const byName = normLower(nameVal) === inputLower;
+                const byEmail = normLower(emailVal) === inputLower;
+
+                return byName || byEmail;
+            });
+        }
+
+        $("#loginForm").on("submit", function (e) {
+            e.preventDefault();
+
+            // Reset errors
+            usernameError.text("");
+            passwordError.text("");
+            username.removeClass("is-invalid");
+            password.removeClass("is-invalid");
+
+            const userVal = norm(username.val());
+            const passVal = norm(password.val());
+
+            // Basic empty checks
+            let invalid = false;
+            if (!userVal) {
+                username.addClass("is-invalid");
+                usernameError.text("All fields are required.");
+                invalid = true;
+            }
+            if (!passVal) {
+                password.addClass("is-invalid");
+                passwordError.text("All fields are required.");
+                invalid = true;
+            }
+            if (invalid) return;
+
+            // Read users
+            const users = getRegisteredUsers();
+
+            if (!Array.isArray(users) || users.length === 0) {
+                username.addClass("is-invalid");
+                password.addClass("is-invalid");
+                usernameError.text("No registered users found on this origin.");
+                passwordError.text("Please register first before logging in.");
+                return;
+            }
+
+            // Find user by username/email
+            const matchedUser = findUser(users, userVal);
+
+            if (!matchedUser) {
+                username.addClass("is-invalid");
+                password.addClass("is-invalid");
+                usernameError.text("Invalid credentials.");
+                passwordError.text("Invalid credentials.");
+                return;
+            }
+
+            // Compare password
+            const storedPass = pick(matchedUser, ["Password", "password"]);
+            const passMatch = norm(storedPass) === passVal;
+
+            if (!passMatch) {
+                password.addClass("is-invalid");
+                usernameError.text("Invalid credentials.");
+                passwordError.text("Invalid credentials.");
+                return;
+            }
+
+            // Success: create session and redirect
+            const sessionId = createSessionId();
+            localStorage.setItem("sessionId", sessionId);
+            sessionStorage.setItem("sessionId", sessionId);
+            localStorage.setItem("loggedInUser", JSON.stringify({
+                id: matchedUser.id ?? null,
+                sessionId: sessionId,
+                name: pick(matchedUser, ["Username", "username"]) ?? "",
+                email: pick(matchedUser, ["Email", "email"]) ?? "",
+            }));
+
+            // Reset the correct form
+            const formEl = document.getElementById("loginForm");
+            if (formEl) formEl.reset();
+
+            // Disable the button briefly to prevent double clicks
+            submitBtn.prop("disabled", true);
+
+            const goToFeed = () => window.location.href = "feed.html";
+
+            if (window.Swal && typeof Swal.fire === "function") {
+                Swal.fire({
+                    icon: 'success',
+                    title: "Login Successful!",
+                    text: "Welcome back to MiniInstagram",
+                    confirmButtonText: 'Go to Feed',
+                    showClass: { popup: 'swal2-show' },
+                    hideClass: { popup: 'swal2-hide' }
+                }).then((result) => {
+                    goToFeed();
+                }).finally(() => {
+                    submitBtn.prop("disabled", false);
+                });
+            } else {
+                // Fallback
+                goToFeed();
+                submitBtn.prop("disabled", false);
+            }
+        });
+    </script>
+</body>
+
+</html>

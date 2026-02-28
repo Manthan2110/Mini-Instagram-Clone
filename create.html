@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Post | Mini Instagram</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0f1720;
+      color: #e6eef6;
+      font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    /* Topbar */
+    .navbar {
+      background: linear-gradient(180deg, #111827 0%, #0f1720 100%) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+    }
+
+    .navbar-brand {
+      color: #0ea5a4 !important;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .navbar-brand:hover {
+      color: #06b6d4 !important;
+    }
+
+    .navbar-text {
+      color: #e6eef6 !important;
+      font-weight: 600;
+    }
+
+    /* Form Container */
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .create-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.01));
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 8px 24px rgba(2, 6, 23, 0.5);
+    }
+
+    .create-card h2 {
+      color: #e6eef6;
+      margin-bottom: 24px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Preview Box */
+    .preview-box {
+      height: 320px;
+      border: 2px dashed rgba(14, 165, 164, 0.3);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(14, 165, 164, 0.05), rgba(6, 182, 212, 0.05));
+      margin-bottom: 24px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .preview-box:hover {
+      border-color: rgba(14, 165, 164, 0.5);
+      background: linear-gradient(135deg, rgba(14, 165, 164, 0.1), rgba(6, 182, 212, 0.1));
+    }
+
+    .preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview-box.empty {
+      cursor: pointer;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .preview-box.empty i {
+      font-size: 48px;
+      color: #0ea5a4;
+    }
+
+    .preview-box.empty span {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    /* Form Controls */
+    .form-label {
+      color: #cbd5e1;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-control, .form-textarea {
+      background-color: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #e6eef6;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      margin-bottom: 20px;
+    }
+
+    .form-control::placeholder, .form-textarea::placeholder {
+      color: #64748b;
+    }
+
+    .form-control:focus, .form-textarea:focus {
+      background-color: rgba(255, 255, 255, 0.04);
+      border-color: rgba(14, 165, 164, 0.5);
+      color: #e6eef6;
+      box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.1);
+    }
+
+    .form-control:disabled {
+      background-color: rgba(255, 255, 255, 0.01);
+    }
+
+    /* Textarea */
+    #postDesc {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    /* Input Group */
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    /* Error Messages */
+    .error-msg {
+      color: #ef4444;
+      font-size: 13px;
+      margin-top: -16px;
+      margin-bottom: 12px;
+      display: block;
+      font-weight: 500;
+    }
+
+    /* Buttons */
+    .btn-publish {
+      background: linear-gradient(135deg, #0ea5a4, #06b6d4);
+      border: 0;
+      color: #fff;
+      font-weight: 600;
+      padding: 12px 32px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .btn-publish:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(14, 165, 164, 0.3);
+    }
+
+    .btn-publish:active {
+      transform: translateY(0);
+    }
+
+    /* File Input Styling */
+    #postImage {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .form-container {
+        padding: 20px;
+      }
+
+      .create-card {
+        padding: 24px;
+      }
+
+      .preview-box {
+        height: 250px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .form-container {
+        padding: 16px;
+      }
+
+      .create-card {
+        padding: 20px;
+      }
+
+      .create-card h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<aside id="sidebar" class="sidebar bg-dark text-white position-fixed">
+  <div class="sidebar-top p-4 d-flex align-items-center">
+    <img src="images/insta-logo.png" alt="logo" class="insta-logo w-25">
+    <img src="images/logo-Photoroom.png" alt="logo" class="insta-logo w-50">
+    <button id="sidebarClose" class="btn btn-outline-light btn-sm ms-auto d-md-none"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <nav class="nav flex-column px-2">
+    <a class="nav-link text-white d-flex align-items-center" href="feed.html"><i class="fa-regular fa-images me-2"></i> Feed</a>
+    <a class="nav-link text-white d-flex align-items-center" href="profile.html"><i class="fa-regular fa-user me-2"></i> Profile <span class="badge bg-primary ms-auto">NEW</span></a>
+    <a class="nav-link active text-white d-flex align-items-center" href="create.html"><i class="fa-regular fa-square-plus me-2"></i>Create Post <span class="badge bg-primary ms-auto">NEW</span></a>
+    <a class="nav-link text-white d-flex align-items-center" href="#"><i class="fa-solid fa-magnifying-glass me-2"></i> Explore</a>
+    <a class="nav-link text-white d-flex align-items-center" href="#"><i class="fa-solid fa-paper-plane me-2"></i> Direct Messages</a>
+    <a class="nav-link text-white d-flex align-items-center" href="#"><i class="fa-solid fa-gear me-2"></i> Settings</a>
+  </nav>
+  <div class="sidebar-footer px-3 mt-auto pb-4">
+    <a href="login.html" class="text-white text-decoration-none"><i class="fa-solid fa-right-from-bracket me-2"></i> Log out</a>
+  </div>
+</aside>
+<!-- NAVBAR -->
+<nav class="navbar sticky-top">
+  <div class="container">
+    <a href="feed.html" class="navbar-brand"><i class="bi bi-arrow-left me-2"></i>Back</a>
+    <span class="navbar-text">Create new post</span>
+    <button id="publishBtn" class="btn btn-publish">Publish</button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="form-container">
+  <div class="create-card">
+    <h2><i class="bi bi-plus-circle"></i>Create Post</h2>
+
+    <!-- Image Preview -->
+    <div class="preview-box empty" id="imagePreview" onclick="document.getElementById('postImage').click();">
+      <i class="bi bi-cloud-upload"></i>
+      <span>Click to upload or drag an image</span>
+    </div>
+
+    <!-- Image Input -->
+    <input type="file" id="postImage" accept="image/*">
+
+    <!-- Title -->
+    <div>
+      <label class="form-label"><i class="bi bi-chat-left-text"></i>Post Title</label>
+      <input type="text" id="postTitle" class="form-control" placeholder="Give your post a catchy title...">
+      <small class="error-msg" id="titleError"></small>
+    </div>
+
+    <!-- Description -->
+    <div>
+      <label class="form-label"><i class="bi bi-file-text"></i>Description</label>
+      <textarea id="postDesc" class="form-control form-textarea" placeholder="Write something about this post..."></textarea>
+      <small class="error-msg" id="descError"></small>
+    </div>
+
+  </div>
+</div>
+
+<!-- jQuery + Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+$(function () {
+
+  // ========================================
+  // SESSION VALIDATION
+  // ========================================
+  
+  // Function: Validate user session
+// ========================================
+// SESSION VALIDATION
+// ========================================
+
+function validateSession() {
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const sessionId = localStorage.getItem("sessionId");
+
+  if (!loggedInUser || !sessionId || loggedInUser.sessionId !== sessionId) {
+
+    // SweetAlert2 (instead of alert)
+    Swal.fire({
+      icon: 'warning',
+      title: 'Session Expired',
+      text: 'Please log in again.',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#0ea5a4'
+    }).then(() => {
+      window.location.href = "../login.html";
+    });
+
+    return null;
+  }
+
+  return loggedInUser;
+}
+
+  // Validate session on page load
+  const loggedInUserData = validateSession();
+  if (!loggedInUserData) return; // Exit if not logged in
+
+  // ========================================
+  // FETCH USER DATA FROM USERS ARRAY
+  // ========================================
+
+  // Get the logged-in username from loggedInUser
+  const loggedInUsername = loggedInUserData.name;
+  
+  // Fetch the complete user data from users array
+  const allUsers = JSON.parse(localStorage.getItem("users")) || [];
+  const currentUser = allUsers.find(u => u.username === loggedInUsername);
+
+  if (!currentUser) {
+    // User not found in users array
+    alert("User data not found. Please log in again.");
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("sessionId");
+    window.location.href = "../login.html";
+    return;
+  }
+
+  // ========================================
+  // HELPER FUNCTIONS
+  // ========================================
+
+  function getAvatarColor(name) {
+    const colors = ["#1f2937", "#6b21a8", "#065f46", "#0ea5a4", "#dc2626", "#f59e0b"];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colors[Math.abs(hash) % colors.length];
+  }
+
+  let base64Image = "";
+
+  /* ---------- IMAGE TO BASE64 ---------- */
+  $("#postImage").on("change", function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      base64Image = e.target.result;
+      $("#imagePreview").html(`<img src="${base64Image}">`).removeClass("empty");
+      $("#imageError").text("");
+    };
+    reader.readAsDataURL(file);
+  });
+
+  /* ---------- PUBLISH POST ---------- */
+  $("#publishBtn").click(function () {
+
+    const title = $("#postTitle").val().trim();
+    const desc = $("#postDesc").val().trim();
+
+    let valid = true;
+
+    // validations
+    if (!base64Image) {
+      $("#imagePreview").addClass("empty").html(`
+        <i class="bi bi-exclamation-triangle"></i>
+        <span>Please select an image</span>
+      `);
+      valid = false;
+    }
+
+    if (title.length < 2) {
+      $("#titleError").text("Title must be at least 2 characters");
+      valid = false;
+    } else {
+      $("#titleError").text("");
+    }
+
+    if (desc.length < 2) {
+      $("#descError").text("Description must be at least 2 characters");
+      valid = false;
+    } else {
+      $("#descError").text("");
+    }
+
+    if (!valid) return;
+
+    const posts = JSON.parse(localStorage.getItem("posts")) || [];
+
+    // create post object
+    const newPost = {
+      id: "p" + Date.now(),
+      user: {
+        username: currentUser.username,
+        displayName: currentUser.name,
+        avatar: getAvatarColor(currentUser.name)
+      },
+      title: title,
+      description: desc,
+      image: base64Image,
+      likes: 0,
+      liked_by: [],
+      saved_by: [],
+      comments: [],
+      created_at: Date.now()
+    };
+
+    posts.unshift(newPost);
+    localStorage.setItem("posts", JSON.stringify(posts));
+
+    // redirect to feed
+    window.location.href = "feed.html";
+  });
+
+});
+</script>
+
+</body>
+</html>

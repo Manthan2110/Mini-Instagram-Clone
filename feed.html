@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feed | MiniInstagram</title>
+
+  <!-- Bootstrap & icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- Custom style -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Sidebar / drawer -->
+  <div class="app d-flex">
+    <aside id="sidebar" class="sidebar bg-dark text-white position-fixed">
+      <div class="sidebar-top p-4 d-flex align-items-center">
+        <img src="images/insta-logo.png" alt="logo" class="insta-logo w-25">
+        <img src="images/logo-Photoroom.png" alt="logo" class="insta-logo w-50">
+        <button id="sidebarClose" class="btn btn-outline-light btn-sm ms-auto d-md-none"><i class="bi bi-x-lg"></i></button>
+      </div>
+
+      <nav class="nav flex-column px-2">
+        <a class="nav-link active text-white d-flex align-items-center" href="feed.html"><i class="fa-regular fa-images me-2"></i> Feed</a>
+        <a class="nav-link text-white d-flex align-items-center" href="profile.html"><i class="fa-regular fa-user me-2"></i> Profile <span class="badge bg-primary ms-auto">NEW</span></a>
+        <a class="nav-link text-white d-flex align-items-center" href="create.html"><i class="fa-regular fa-square-plus me-2"></i>Create Post <span class="badge bg-primary ms-auto">NEW</span></a>
+        <a class="nav-link text-white d-flex align-items-center" href="#"><i class="fa-solid fa-magnifying-glass me-2"></i> Explore</a>
+        <a class="nav-link text-white d-flex align-items-center" href="#"><i class="fa-solid fa-paper-plane me-2"></i> Direct Messages</a>
+        <a class="nav-link text-white d-flex align-items-center" href="#"><i class="fa-solid fa-gear me-2"></i> Settings</a>
+      </nav>
+
+      <div class="sidebar-footer px-3 mt-auto pb-4">
+        <a href="login.html" class="text-white text-decoration-none"><i class="fa-solid fa-right-from-bracket me-2"></i> Log out</a>
+      </div>
+    </aside>
+
+    <div class="main flex-grow-1">
+      <!-- Topbar -->
+      <header class="topbar bg-dark">
+        <div class="container d-flex align-items-center gap-3 py-3">
+          <button id="toggleSidebar" class="btn btn-outline-light d-md-none"><i class="bi bi-list"></i></button>
+          <a href="#" class="text-decoration-none"><h4 class="mb-0 text-white d-none d-md-block">Feed</h4></a>
+
+          <div class="ms-auto d-flex align-items-center gap-3">
+            <button id="btnCreate" class="btn btn-outline-primary d-none d-md-inline">Create Post</button>
+            <a id="btnCreateMobile" class="btn btn-primary d-md-none rounded-circle" href="create.html"><i class="bi bi-plus-lg"></i></a>
+
+            <div class="d-flex align-items-center gap-2">
+              <img id="navAvatar" src="https://via.placeholder.com/42" alt="avatar" class="rounded-circle border" width="42" height="42">
+              <div class="d-none d-sm-block">
+                <div id="navName" class="fw-semibold text-white small"></div>
+                <div id="navHandle" class="text-secondary small"></div>
+              </div>
+              <button id="profileMenu" class="btn btn-link text-white d-none d-sm-inline p-0"></button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <main class="container py-4">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <!-- feed header -->
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div>
+                <small class="text-white fs-5">Posts from all users</small>
+              </div>
+
+              <div class="d-flex gap-2">
+                <button id="refreshFeed" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+              </div>
+            </div>
+
+            <!-- Feed list -->
+            <div id="feed" class="d-grid gap-4">
+              <!-- Posts injected here -->
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Comment Modal -->
+      <div class="modal fade" id="commentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content" style="background: #0f1724; border: 1px solid rgba(255, 255, 255, 0.05);">
+            <div class="modal-header" style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+              <h5 class="modal-title fw-600 text-white"><i class="bi bi-chat-dots"></i> Comments</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+              <div id="modalPostPreview" class="mb-4 pb-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);"></div>
+              <div id="commentsContainer" class="mb-4"></div>
+
+              <div style="border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 16px;">
+                <div class="input-group">
+                  <input id="newCommentInput" type="text" class="form-control" placeholder="Add a comment..." style="background-color: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); color: #e6eef6;">
+                  <button id="addCommentBtn" class="btn btn-primary" style="background: linear-gradient(135deg, #0ea5a4, #06b6d4); border: 0;">Post</button>
+                </div>
+                <small id="commentError" class="text-danger mt-2 d-block"></small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Post Modal -->
+      <div class="modal fade" id="editPostModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content bg-card">
+            <div class="modal-header border-0">
+              <h5 class="modal-title">Edit Post</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+              <form id="editPostForm">
+                <input type="hidden" id="editPostId" />
+                <div class="mb-3">
+                  <label class="form-label">Title</label>
+                  <input id="editPostTitle" type="text" class="form-control" placeholder="Title"/>
+                  <small class="text-danger d-block" id="editTitleError"></small>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Description</label>
+                  <textarea id="editPostDesc" class="form-control" rows="4" placeholder="Description"></textarea>
+                  <small class="text-danger d-block" id="editDescError"></small>
+                </div>
+              </form>
+            </div>
+
+            <div class="modal-footer border-0">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button id="savePostChanges" type="button" class="btn btn-primary">Save Changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast (Share) -->
+      <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+        <div id="shareToast" class="toast align-items-center text-bg-dark border-0" role="alert"
+          aria-live="assertive" aria-atomic="true">
+          <div class="d-flex">
+            <div class="toast-body">
+              Post link copied to clipboard (simulated).
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- jQuery + Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- App JS -->
+  <script src="scripts/script.js"></script>
+</body>
+</html>
